@@ -4,14 +4,14 @@ Connect Claude Code to your [Better Stack](https://betterstack.com) Uptime and T
 
 ## Install
 
-This repository is also a Claude Code plugin marketplace, so you can add it and install the plugin in two commands:
+Install plugin from Claude Code marketplace:
 
 ```text
 /plugin marketplace add BetterStackHQ/claude-plugin
 /plugin install betterstack@betterstack
 ```
 
-Or add the MCP server with the CLI:
+Or add the MCP server using the CLI:
 
 ```bash
 claude mcp add --transport http betterstack https://mcp.betterstack.com
@@ -19,7 +19,7 @@ claude mcp add --transport http betterstack https://mcp.betterstack.com
 
 Add `--scope user` to make it available across all your projects.
 
-Or add it manually to your project `.mcp.json`:
+Or add it manually to your `.mcp.json`:
 
 ```json
 {
@@ -58,7 +58,13 @@ The complete tool reference and example prompts live in the [Better Stack MCP in
 
 ## Authentication
 
-OAuth is the recommended flow and works out of the box with Claude Code. If you prefer an API token, you can pass it via the `Authorization` header instead. See [API authentication](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/):
+OAuth is the recommended flow and works out of the box with Claude Code.
+The first tool call opens a browser for OAuth sign-in. No token configuration needed.
+
+### Prefer API token over OAuth? 
+
+Get a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/).
+Then use pass it via the `Authorization` header:
 
 ```json
 {
