@@ -19,7 +19,7 @@ claude mcp add --transport http betterstack https://mcp.betterstack.com
 
 Add `--scope user` to make it available across all your projects.
 
-Or add it manually to your `.mcp.json`:
+Alternatively, add Better Stack MPC to your `.mcp.json` manually:
 
 ```json
 {
