@@ -11,7 +11,15 @@ This repository is also a Claude Code plugin marketplace, so you can add it and 
 /plugin install betterstack@betterstack
 ```
 
-Or add the MCP server manually to your `.mcp.json` (project) or via `claude mcp add`:
+Or add the MCP server with the CLI:
+
+```bash
+claude mcp add --transport http betterstack https://mcp.betterstack.com
+```
+
+Add `--scope user` to make it available across all your projects.
+
+Or add it manually to your project `.mcp.json`:
 
 ```json
 {
