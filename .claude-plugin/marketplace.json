@@ -1,0 +1,22 @@
+{
+  "name": "betterstack",
+  "description": "Better Stack observability for Claude Code: Uptime and Telemetry through MCP.",
+  "owner": {
+    "name": "Better Stack",
+    "email": "hello@betterstack.com",
+    "url": "https://betterstack.com"
+  },
+  "plugins": [
+    {
+      "name": "betterstack",
+      "source": "./",
+      "description": "Observability for AI agents: query logs and metrics, build dashboards, manage uptime monitors, and respond to incidents through Better Stack.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Better Stack",
+        "email": "hello@betterstack.com",
+        "url": "https://betterstack.com"
+      }
+    }
+  ]
+}
