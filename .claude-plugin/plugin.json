@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "betterstack",
   "displayName": "Better Stack",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Investigate incidents and query your Better Stack logs, metrics, traces, errors, uptime monitors and on-call schedules, and build dashboards, through the Better Stack MCP server.",
   "author": {
     "name": "Better Stack, Inc.",
@@ -28,7 +28,7 @@
     "better-stack",
     "mcp"
   ],
-  "icon": "./.claude-plugin/logo.svg",
+  "icon": "./assets/icon.png",
   "documentationUrl": "https://betterstack.com/docs/getting-started/integrations/mcp/",
   "supportUrl": "https://betterstack.com/help",
   "privacyPolicyUrl": "https://betterstack.com/privacy",

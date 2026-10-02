@@ -11,7 +11,7 @@
       "name": "betterstack",
       "source": "./",
       "description": "Investigate incidents and query your Better Stack logs, metrics, traces, errors, uptime monitors and on-call schedules, and build dashboards, through the Better Stack MCP server.",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "author": {
         "name": "Better Stack, Inc.",
         "email": "hello@betterstack.com",
