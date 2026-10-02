@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "betterstack",
   "displayName": "Better Stack",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Observability for AI agents: query logs and metrics, build dashboards, manage uptime monitors, and respond to incidents through Better Stack.",
   "author": {
     "name": "Better Stack",
@@ -10,6 +10,8 @@
     "url": "https://betterstack.com"
   },
   "homepage": "https://betterstack.com",
+  "icon": "./.claude-plugin/logo.svg",
+  "privacyPolicyUrl": "https://betterstack.com/privacy",
   "repository": "https://github.com/BetterStackHQ/claude-plugin",
   "license": "MIT",
   "keywords": [

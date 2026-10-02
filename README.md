@@ -73,7 +73,7 @@ Then pass it via the `Authorization` header:
       "type": "http",
       "url": "https://mcp.betterstack.com",
       "headers": {
-        "Authorization": "Bearer $TOKEN"
+        "Authorization": "Bearer <your-better-stack-api-token>"
       }
     }
   }
