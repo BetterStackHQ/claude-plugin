@@ -1,5 +1,5 @@
 ---
-name: incident-investigation
+name: investigate-incident
 description: Investigate a Better Stack incident, alert or outage report end to end. Find the incident, check who is on call, drill into the metrics, logs, traces and errors around it, correlate with recent releases, and post a short situation report. Use when someone asks why something is down, slow or erroring, mentions a Better Stack incident, monitor or alert, or when Claude is working as an on-call first responder in an incident channel (for example in Claude Tag).
 ---
 

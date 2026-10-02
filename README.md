@@ -1,6 +1,6 @@
 # Better Stack plugin for Claude Code
 
-Connect Claude Code to your [Better Stack](https://betterstack.com) Uptime and Telemetry data through the Model Context Protocol (MCP). Your agent can query logs and metrics, build dashboards, manage uptime monitors, and respond to incidents, all in natural language.
+Connect Claude Code to your [Better Stack](https://betterstack.com) Incidents and Telemetry data through the Model Context Protocol (MCP). Your agent can investigate incidents, check who is on call, manage uptime monitors, query logs, metrics, traces and errors, and build dashboards, all in natural language.
 
 ## Install
 
@@ -50,7 +50,7 @@ Try asking your agent things like:
 
 The plugin exposes the full Better Stack MCP toolset:
 
-- **Uptime**: monitors, incidents, on-call schedules and escalation, heartbeats, status pages.
+- **Incidents** (formerly Uptime): incidents, on-call schedules and escalation, uptime monitors, heartbeats, status pages.
 - **Telemetry**: dashboards, charts, alerts, log/metric/error queries, sources and applications.
 - **Documentation**: search Better Stack docs from within Claude Code.
 
@@ -73,7 +73,7 @@ Then pass it via the `Authorization` header:
       "type": "http",
       "url": "https://mcp.betterstack.com",
       "headers": {
-        "Authorization": "Bearer $TOKEN"
+        "Authorization": "Bearer <your-better-stack-api-token>"
       }
     }
   }
@@ -82,7 +82,7 @@ Then pass it via the `Authorization` header:
 
 ## Skills
 
-- **incident-investigation**: investigates an incident or alert end to end. It finds the incident, checks who is on call, pulls the errors, logs, traces, metrics and releases around the start time, and posts a short situation report. It stays read-only unless asked to act.
+- **investigate-incident**: investigates an incident or alert end to end. It finds the incident, checks who is on call, pulls the errors, logs, traces, metrics and releases around the start time, and posts a short situation report. It stays read-only unless asked to act.
 
 ## Use with Claude Tag (on-call in Slack)
 
@@ -95,7 +95,7 @@ Then pass it via the `Authorization` header:
 
 **Option B, with an API token:**
 
-1. On the bundle's **Plugins** tab, add this plugin. It points Claude at `https://mcp.betterstack.com` and brings the incident-investigation skill.
+1. On the bundle's **Plugins** tab, add this plugin. It points Claude at `https://mcp.betterstack.com` and brings the investigate-incident skill.
 2. On the **Credentials** tab, click **Connect** next to **Custom tool**, choose **Bearer**, paste a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/) and set **Allowed websites** to `mcp.betterstack.com`.
 
 To check it, start a new thread in a channel the bundle covers and ask *"@Claude list open Better Stack incidents and the errors from the last hour."*

@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "betterstack",
   "displayName": "Better Stack",
-  "version": "1.1.0",
-  "description": "Observability for AI agents: query logs and metrics, build dashboards, manage uptime monitors, and respond to incidents through Better Stack.",
+  "version": "1.2.0",
+  "description": "Connect Claude to your Better Stack Incidents and Telemetry data.",
   "author": {
-    "name": "Better Stack",
+    "name": "Better Stack, Inc.",
     "email": "hello@betterstack.com",
     "url": "https://betterstack.com"
   },
@@ -15,14 +15,22 @@
   "keywords": [
     "observability",
     "monitoring",
+    "incident-response",
+    "on-call",
+    "incidents",
+    "uptime",
     "logs",
     "metrics",
+    "traces",
+    "errors",
     "dashboards",
-    "uptime",
-    "incidents",
-    "on-call",
     "telemetry",
     "better-stack",
     "mcp"
-  ]
+  ],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://betterstack.com/docs/getting-started/integrations/mcp/",
+  "supportUrl": "https://betterstack.com/help",
+  "privacyPolicyUrl": "https://betterstack.com/privacy",
+  "termsOfServiceUrl": "https://betterstack.com/terms"
 }
