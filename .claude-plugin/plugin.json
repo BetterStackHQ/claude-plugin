@@ -3,7 +3,7 @@
   "name": "betterstack",
   "displayName": "Better Stack",
   "version": "1.2.0",
-  "description": "Investigate incidents and query your Better Stack logs, metrics, traces, errors, uptime monitors and on-call schedules, and build dashboards, through the Better Stack MCP server.",
+  "description": "Connect Claude to your Better Stack Incidents and Telemetry data.",
   "author": {
     "name": "Better Stack, Inc.",
     "email": "hello@betterstack.com",
