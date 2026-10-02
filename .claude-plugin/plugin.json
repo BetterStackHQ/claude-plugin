@@ -3,28 +3,34 @@
   "name": "betterstack",
   "displayName": "Better Stack",
   "version": "1.1.1",
-  "description": "Observability for AI agents: query logs and metrics, build dashboards, manage uptime monitors, and respond to incidents through Better Stack.",
+  "description": "Investigate incidents and query your Better Stack logs, metrics, traces, errors, uptime monitors and on-call schedules, and build dashboards, through the Better Stack MCP server.",
   "author": {
-    "name": "Better Stack",
+    "name": "Better Stack, Inc.",
     "email": "hello@betterstack.com",
     "url": "https://betterstack.com"
   },
   "homepage": "https://betterstack.com",
-  "icon": "./.claude-plugin/logo.svg",
-  "privacyPolicyUrl": "https://betterstack.com/privacy",
   "repository": "https://github.com/BetterStackHQ/claude-plugin",
   "license": "MIT",
   "keywords": [
     "observability",
     "monitoring",
+    "incident-response",
+    "on-call",
+    "incidents",
+    "uptime",
     "logs",
     "metrics",
+    "traces",
+    "errors",
     "dashboards",
-    "uptime",
-    "incidents",
-    "on-call",
     "telemetry",
     "better-stack",
     "mcp"
-  ]
+  ],
+  "icon": "./.claude-plugin/logo.svg",
+  "documentationUrl": "https://betterstack.com/docs/getting-started/integrations/mcp/",
+  "supportUrl": "https://betterstack.com/help",
+  "privacyPolicyUrl": "https://betterstack.com/privacy",
+  "termsOfServiceUrl": "https://betterstack.com/terms"
 }
