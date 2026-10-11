@@ -63,7 +63,7 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 
 ### Claude Code
 
-1. Run `/mcp`, select the Better Stack server (from the plugin it shows as `plugin:betterstack:betterstack`) and follow the steps to sign in in the browser. From a terminal: `claude mcp login betterstack`.
+1. Run `/mcp`, select the Better Stack server (from the plugin it shows as `plugin:betterstack:betterstack`) and follow the steps to sign in in the browser. From a terminal: `claude mcp login plugin:betterstack:betterstack`, or `claude mcp login betterstack` if the server was added by hand. `claude mcp list` shows the exact name.
 2. If the server isn't listed, install the plugin (`/plugin marketplace add BetterStackHQ/claude-plugin`, then `/plugin install betterstack@betterstack`) or add it: `claude mcp add --transport http betterstack https://mcp.betterstack.com`.
 3. Start a new session, or run `/mcp` again to check it shows as connected.
 
