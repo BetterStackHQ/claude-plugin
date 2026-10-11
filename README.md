@@ -103,8 +103,7 @@ The plugin comes with skills that teach your agent how to work with Better Stack
 
 **Migrate**
 
-- **datadog-import**, **grafana-import**: recreate Datadog and Grafana dashboards in Better Stack.
-- **datadog-alert-import**: recreate Datadog monitors as Better Stack chart alerts.
+- **grafana-import**: recreate Grafana dashboards in Better Stack.
 
 ## Use with Claude Tag (on-call in Slack)
 

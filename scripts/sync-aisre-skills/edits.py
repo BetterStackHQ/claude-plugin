@@ -221,7 +221,7 @@ t = t.replace("""Reference a monitor or policy so it renders as a clickable link
 `{{monitor::<id>::<name>}}` and `{{policy::<id>::<name>}}`.""", "Link a monitor or policy with the Better Stack URL from the tool result rather than a bare ID.")
 (root / "uptime-monitors" / "SKILL.md").write_text(t)
 
-# ---- datadog-import / grafana-import
+# ---- grafana-import
 TOOLSETUP_OLD = """Most Better Stack MCP tools are **deferred** — they won't appear in your tool list until loaded via ToolSearch. Before starting, load the dashboard tools, e.g.:
 
 ```
@@ -232,21 +232,17 @@ ToolSearch("select:create_dashboard,add_chart_to_dashboard,set_dashboard_variabl
 TOOLSETUP_NEW = """You need the Better Stack dashboard tools (`create_dashboard`, `add_chart_to_dashboard`, `set_dashboard_variable`) and the query tools (`sources`, `source`, `metrics_schema`, `query`). If your client loads tools on demand, load them before starting.
 
 The extract script is `scripts/extract-layout.js` in this skill's directory, run with Node.js 18 or newer. If you can't run scripts, read the export yourself and pull out the same fields: sections, panels, their queries, units and template variables."""
-for s in ("datadog-import", "grafana-import"):
+for s in ("grafana-import",):
     sub(s, f"allowed-tools: Bash(node .claude/skills/{s}/scripts/*)\n", "")
     sub(s, TOOLSETUP_OLD, TOOLSETUP_NEW)
     p = root / s / "SKILL.md"; t = p.read_text()
     t = t.replace(f"node .claude/skills/{s}/scripts/", "node <this skill's directory>/scripts/")
     p.write_text(t)
 
-# ---- datadog-alert-import
-sub("datadog-alert-import", "**translate its query into a chart, then attach the alert(s)** with `create_chart_alert`.",
-    "**translate its query into a chart, then attach the alert(s)** with `create_chart_alert`.")
-sub("datadog-alert-import", "Read monitors live via the Datadog MCP (`mcp__datadog__*`; discover the list/get tools at runtime) or from exported JSON.",
-    "Read monitors live through a Datadog MCP server if one is connected (discover its list/get tools at runtime), or from exported JSON.")
-sub("datadog-alert-import", "## Not settable via `create_chart_alert` — flag per monitor", "## Not settable via `create_chart_alert` — flag per monitor")
-sub("datadog-alert-import", "Supported by BS chart alerts but not by this tool — **set in the UI after import**: `on_missing_data` (Datadog's no-data behavior; `treat_as_zero`/`dont_fire`/`treat_as_previous`/`start_incident`), `incident_per_series` (Datadog grouped/\"multi alert\" — one incident per host; or fan out one alert per group via `series_names`), `critical_alert`.",
-    "Supported by BS chart alerts but not by `create_chart_alert` — **set in the UI after import**: `on_missing_data` (Datadog's no-data behavior; `treat_as_zero`/`dont_fire`/`treat_as_previous`/`start_incident`) and `critical_alert`. `incident_per_series` (Datadog grouped/\"multi alert\" — one incident per host) is set afterwards with `edit_chart_alert`; or fan out one alert per group via `series_names`.")
+# ---- the Datadog import skills stay AI SRE-only (Simon, 2026-10-11): drop references to them
+sub("dashboard-layout", "Referenced by `dashboard-builder`, `datadog-import`, and `grafana-import` skills.",
+    "Referenced by the `dashboard-builder` and `grafana-import` skills.")
+sub("chart-alerts", "\n>\n> **Migrating alerts from Datadog?** Load the `datadog-alert-import` skill — it maps each Datadog monitor type to a chart alert.", "")
 
 # ---- descriptions: scope to Better Stack, since plugin skills sit next to the user's own
 DESC = {

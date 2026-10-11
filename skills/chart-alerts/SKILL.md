@@ -8,8 +8,6 @@ description: Guide for creating and managing Better Stack chart alerts. Load whe
 Chart alerts monitor metrics and logs queries and trigger incidents when conditions are met. They are attached to charts on dashboards or explorations. `chart_alert_help` has the server's current reference.
 
 > **Two-tier thresholds:** a chart alert holds a single `value`. To reproduce a Datadog warning + critical monitor, create **two** alerts on the same chart (one per threshold).
->
-> **Migrating alerts from Datadog?** Load the `datadog-alert-import` skill — it maps each Datadog monitor type to a chart alert.
 
 ## Alert Types
 

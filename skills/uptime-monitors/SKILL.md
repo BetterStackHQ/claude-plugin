@@ -94,6 +94,7 @@ When a user pastes a Datadog `datadog_synthetics_test` (Terraform or JSON), conv
 - **Omit `policy_id` to use the team's default policy.**
 - **Gotcha: when `policy_id` is set, the simple `email`/`sms`/`call`/`push` flags are ignored** — the policy decides who is notified. Only use those flags when you are _not_ setting a policy.
 - Use `escalation_policy` to read a policy's escalation steps (who is notified, in what order, with repeats) before recommending one.
+- A step notifies a Slack channel through a `slack_integration` step member, whose id is a Slack integration ID from `slack_integrations`. Policy steps are changed in the Better Stack UI; what the channel does with the alert (a thread or a channel per incident, who Slack users can page) is the Slack integration's, which `edit_slack_integration` changes.
 
 ## Linking in chat
 

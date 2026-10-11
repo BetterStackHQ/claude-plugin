@@ -5,7 +5,7 @@ description: Definitive guide for Better Stack dashboard layout — grid system,
 
 # Dashboard Layout Guide
 
-This is the single source of truth for all layout decisions. Referenced by `dashboard-builder`, `datadog-import`, and `grafana-import` skills.
+This is the single source of truth for all layout decisions. Referenced by the `dashboard-builder` and `grafana-import` skills.
 
 ## Grid System
 

@@ -26,3 +26,4 @@ list_dashboards	dashboards
 list_releases	releases
 get_exploration_details	exploration
 query_telemetry	query
+list_slack_integrations	slack_integrations

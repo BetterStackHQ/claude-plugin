@@ -11,6 +11,4 @@ chart-alerts
 dashboard-builder
 dashboard-layout
 map-hierarchy-charts
-datadog-import
 grafana-import
-datadog-alert-import

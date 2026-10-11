@@ -12,4 +12,6 @@ scripts/sync-aisre-skills/port.sh ../aisre-proxy/.claude/skills skills
 
 `edits.py` asserts that every passage it rewrites is still there, so when a skill changes upstream the build stops at that passage instead of shipping a half-adapted skill. Update the edit, run it again, and review the diff.
 
-Skills not synced: `investigation-methodology` (its public counterpart is `investigate-incident`), `report` (AI SRE's downloadable reports) and `funnel-charts` (the public MCP can't create explorations yet).
+Skills not synced are listed with the reason in `not-synced.txt`: `investigation-methodology` (its public counterpart is `investigate-incident`), `report` (AI SRE's downloadable reports), `funnel-charts` (the public MCP can't create explorations yet), and `datadog-import` and `datadog-alert-import` (kept AI SRE-only).
+
+aisre-proxy's `.github/workflows/sync-plugin-skills.yml` runs this script: on each aisre-proxy PR that touches a skill it fails when a skill is in neither `skills.txt` nor `not-synced.txt`, or when an edit no longer applies; after merge it opens a sync PR here and in codex-plugin and cursor-plugin.
