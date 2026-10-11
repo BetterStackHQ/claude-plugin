@@ -32,7 +32,7 @@ Alternatively, add the Better Stack MCP server to your `.mcp.json` manually:
 }
 ```
 
-The first tool call opens a browser for OAuth sign-in. No token configuration needed.
+Then run `/mcp`, select the Better Stack server and sign in through your browser (OAuth, no token configuration needed). Start a new session if the tools don't show up right away.
 
 ## What you can do
 
@@ -58,8 +58,9 @@ The complete tool reference and example prompts live in the [Better Stack MCP in
 
 ## Authentication
 
-OAuth is the recommended flow and works out of the box with Claude Code.
-The first tool call opens a browser for OAuth sign-in. No token configuration needed.
+OAuth is the recommended flow. Run `/mcp`, select the Better Stack server and sign in through your browser. No token configuration needed.
+
+If the tools aren't connected, the plugin's **connect-betterstack** skill tells you how to connect in the app you're using (Claude Code, the Claude apps or Claude Tag) instead of failing quietly. You can also ask it directly: *"Set up Better Stack."*
 
 ### Prefer API token over OAuth? 
 
