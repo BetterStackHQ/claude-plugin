@@ -1,6 +1,6 @@
 ---
 name: connect-betterstack
-description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `search_docs`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack).
+description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `documentation`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack).
 ---
 
 # Connect Better Stack
@@ -11,7 +11,7 @@ The Better Stack plugin brings skills, and its tools come from the Better Stack 
 
 Look at the tools you have right now.
 
-- **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `search_docs`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
+- **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `documentation`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
 - **Not connected:** no Better Stack tools at all, only an `authenticate` tool for Better Stack, or a call that fails with `unauthorized`, 401, 403 or "needs authentication".
 
 If you have a Better Stack `authenticate` tool (Claude Code exposes one for claude.ai connectors that aren't signed in), call it and give the user the sign-in link it returns. After they sign in, call `complete_authentication` if that tool exists, then check again.
