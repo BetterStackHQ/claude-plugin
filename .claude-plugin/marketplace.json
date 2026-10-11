@@ -11,7 +11,7 @@
       "name": "betterstack",
       "source": "./",
       "description": "Incidents, logs, metrics, errors and RUM",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "author": {
         "name": "Better Stack, Inc.",
         "email": "hello@betterstack.com",
