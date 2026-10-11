@@ -85,6 +85,14 @@ Then pass it via the `Authorization` header:
 
 - **investigate-incident**: investigates an incident or alert end to end. It finds the incident, checks who is on call, pulls the errors, logs, traces, metrics and releases around the start time, and posts a short situation report. It stays read-only unless asked to act.
 
+## Use in Claude chat and Cowork
+
+1. Go to **Customize > Plugins** ([claude.ai/customize/plugins](https://claude.ai/customize/plugins)) and add **Better Stack**.
+2. On the plugin's **Connectors** tab, add or connect the Better Stack server (`https://mcp.betterstack.com`) and sign in with your Better Stack account.
+3. Start a new chat.
+
+The skills work as soon as the plugin is added, but the Better Stack tools only after step 2. On Team and Enterprise plans, an Owner adds the connector for the organization first, then each member connects with their own account. This follows Anthropic's [plugin feature support](https://claude.com/docs/plugins/platform-support) page.
+
 ## Use with Claude Tag (on-call in Slack)
 
 [Claude Tag](https://claude.com/docs/claude-tag/overview) can use Better Stack as an on-call first responder in your incident channels. An admin sets it up once in an Access bundle at [claude.ai/admin-settings/claude-tag](https://claude.ai/admin-settings/claude-tag). Connect a dedicated Better Stack user rather than a personal login, because everyone in the covered channels acts through it.
