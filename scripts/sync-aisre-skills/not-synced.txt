@@ -1,0 +1,5 @@
+investigation-methodology  AI SRE's own investigation flow; the public counterpart is investigate-incident, maintained in claude-plugin
+report                     builds AI SRE's downloadable reports, which only exist in the AI SRE UI
+funnel-charts              the public MCP can't create or edit explorations yet
+datadog-import             kept AI SRE-only (Simon, 2026-10-11)
+datadog-alert-import       kept AI SRE-only (Simon, 2026-10-11)
