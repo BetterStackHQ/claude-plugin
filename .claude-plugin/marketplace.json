@@ -1,6 +1,6 @@
 {
   "name": "betterstack",
-  "description": "Connect Claude to your Better Stack Incidents and Telemetry data.",
+  "description": "Incidents, logs, metrics, errors and RUM",
   "owner": {
     "name": "Better Stack, Inc.",
     "email": "hello@betterstack.com",
@@ -10,8 +10,8 @@
     {
       "name": "betterstack",
       "source": "./",
-      "description": "Connect Claude to your Better Stack Incidents and Telemetry data.",
-      "version": "1.3.0",
+      "description": "Incidents, logs, metrics, errors and RUM",
+      "version": "1.3.1",
       "author": {
         "name": "Better Stack, Inc.",
         "email": "hello@betterstack.com",

@@ -1,6 +1,6 @@
 # Better Stack plugin for Claude Code
 
-Connect Claude Code to your [Better Stack](https://betterstack.com) Incidents and Telemetry data through the Model Context Protocol (MCP). Your agent can investigate incidents, check who is on call, manage uptime monitors, query logs, metrics, traces and errors, and build dashboards, all in natural language.
+Connect Claude Code to your [Better Stack](https://betterstack.com) Incidents and Telemetry data through the Model Context Protocol (MCP). Your agent can investigate incidents, check who is on call, manage uptime monitors, query logs, metrics, traces, errors and real user monitoring (RUM), and build dashboards, all in natural language.
 
 ## Install
 
