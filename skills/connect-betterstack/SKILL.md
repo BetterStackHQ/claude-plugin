@@ -1,6 +1,6 @@
 ---
 name: connect-betterstack
-description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `search_docs`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude apps, Claude Tag in Slack).
+description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `search_docs`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack).
 ---
 
 # Connect Better Stack
@@ -14,7 +14,7 @@ Look at the tools you have right now.
 - **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `search_docs`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
 - **Not connected:** no Better Stack tools at all, only an `authenticate` tool for Better Stack, or a call that fails with `unauthorized`, 401, 403 or "needs authentication".
 
-If you have a Better Stack `authenticate` tool (Claude apps and Claude Code expose one for connectors that aren't signed in), call it and give the user the sign-in link it returns. After they sign in, call `complete_authentication` if that tool exists, then check again.
+If you have a Better Stack `authenticate` tool (Claude Code exposes one for claude.ai connectors that aren't signed in), call it and give the user the sign-in link it returns. After they sign in, call `complete_authentication` if that tool exists, then check again.
 
 Never make up incidents, monitors, logs or metrics while Better Stack isn't connected. Say it isn't connected and give the steps below.
 
@@ -29,7 +29,7 @@ Use what you know about your environment: your system prompt, your tool names, w
 | You are in Cursor, or tool names look like Cursor's | Cursor |
 | You are Claude Code, you have a shell, tool names start with `mcp__` | Claude Code |
 | You are in a Slack channel or thread (Claude Tag) | Claude Tag |
-| You are Claude on claude.ai, Claude Desktop or the Claude mobile app | Claude apps |
+| You are Claude in claude.ai chat, Cowork, the desktop app or the mobile app, no shell | Claude chat and Cowork |
 
 If you can't tell, ask the user which app they are using, then give that app's steps.
 
@@ -69,12 +69,15 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 
 In a Claude Code cloud session, connect Better Stack at [claude.ai/customize/connectors](https://claude.ai/customize/connectors) instead.
 
-### Claude apps (claude.ai, Desktop, mobile)
+### Claude chat and Cowork (claude.ai, the desktop app, mobile)
 
-1. Go to [claude.ai/customize/connectors](https://claude.ai/customize/connectors).
-2. Add Better Stack as a custom connector with the URL `https://mcp.betterstack.com` if it isn't there yet. On Team and Enterprise plans an admin adds it.
-3. Connect it and sign in with your Better Stack account.
-4. Start a new chat.
+The plugin's skills load in chat right away, but its MCP server works only after it's connected on the plugin's **Connectors** tab:
+
+1. Go to **Customize > Plugins** ([claude.ai/customize/plugins](https://claude.ai/customize/plugins)) and open **Better Stack**.
+2. On its **Connectors** tab, add or connect the Better Stack server (`https://mcp.betterstack.com`) and sign in with your Better Stack account.
+3. Start a new chat.
+
+On Team and Enterprise plans, an Owner adds the connector for the organization first, then each member connects with their own account. If Better Stack was added as a connector without the plugin, connect it at [claude.ai/customize/connectors](https://claude.ai/customize/connectors) instead.
 
 ### Claude Tag (Claude in Slack)
 
