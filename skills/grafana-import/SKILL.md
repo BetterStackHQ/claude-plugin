@@ -28,7 +28,7 @@ The extract script is `scripts/extract-layout.js` in this skill's directory, run
 ## Workflow
 
 1. **Extract summary:** `node scripts/extract-layout.js --dashboard <ID> --summary` — see all sections and panel counts
-2. **Check metrics:** `metrics_schema(id: source_id)` — identify available metrics AND their tags
+2. **Check metrics:** `metrics_schema(id)` — identify available metrics AND their tags
 3. **Discover tag names:** `SELECT DISTINCT tags FROM {{source}} WHERE name = 'your.first.metric' LIMIT 5` — use exact tag names from real data, never guess
 4. **Create dashboard:** `create_dashboard(source_id, name)`
 5. **Translate template variables** — For each `templating.list` entry, create a Better Stack variable with `set_dashboard_variable` AND reference it in the queries that used `$name` via an optional `[[ ]]` clause. Never just omit them. See Template Variable Translation below.
@@ -230,7 +230,7 @@ Common suffixes: `_average`, `_sum`, `_count`, `_max`, `_min`
 **Always use `metrics_schema` to discover the actual name:**
 
 ```
-metrics_schema(id: source_id, name_filter: "aws_rds*")
+metrics_schema(id, name_filter: "aws_rds*")
 ```
 
 The naming convention is not always predictable. CamelCase → lowercase, but word boundaries vary. Always verify.

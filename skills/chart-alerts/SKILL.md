@@ -91,13 +91,13 @@ Monitor specific series or all:
 
 ## Escalation Targets
 
-| Value                      | Description                                         |
-| -------------------------- | --------------------------------------------------- |
-| `current_team`             | Default on-call for the team                        |
+| Value                      | Description                                               |
+| -------------------------- | --------------------------------------------------------- |
+| `current_team`             | Default on-call for the team                              |
 | `gid://uptime/Policy/<id>` | A specific escalation policy (from `escalation_policies`) |
 | `gid://uptime/Team/<id>`   | A specific team's default on-call                   |
 
-To match a Datadog monitor's notification routing, `escalation_policies` and pass the closest policy's gid.
+To match a Datadog monitor's notification routing, call `escalation_policies` and pass the closest policy's gid.
 
 ## Notification Channels
 
