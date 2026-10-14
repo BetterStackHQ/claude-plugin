@@ -236,7 +236,7 @@ LIMIT 20
 | --------------------------------------- | ----------------------------------------------------------------- |
 | `JSONExtract(raw, 'trace_id', ...)`     | `JSONExtract(raw, 'span', 'trace_id', ...)`                       |
 | `JSONExtract(raw, 'service.name', ...)` | `JSONExtract(raw, 'resource', 'attributes', 'service.name', ...)` |
-| `{{_service}}` or a guessed field       | Use the service name expression from `source`         |
+| `{{_service}}` or a guessed field       | Use the service name expression from `source`                     |
 | `duration` column                       | Calculate: `end_time_unix_nano - start_time_unix_nano`            |
 | `WHERE dt BETWEEN`                      | `WHERE {{time}} BETWEEN ...`                                      |
 | `'String'` type                         | `'Nullable(String)'` - prevents failures on missing fields        |

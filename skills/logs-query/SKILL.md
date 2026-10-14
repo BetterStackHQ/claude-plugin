@@ -138,8 +138,8 @@ LIMIT 100
 
 | Mistake                         | Fix                                                        |
 | ------------------------------- | ---------------------------------------------------------- |
-| `{{_service}}`                  | Removed - use the expression from `source`     |
-| Guessed service field path      | Copy the service name expression from `source` |
+| `{{_service}}`                  | Removed - use the expression from `source`                 |
+| Guessed service field path      | Copy the service name expression from `source`             |
 | `WHERE dt BETWEEN`              | `WHERE {{time}} BETWEEN ...`                               |
 | `raw.level` or just `level`     | `JSONExtractCaseInsensitive(raw, 'level', ...)`            |
 | `'String'` type                 | `'Nullable(String)'`                                       |

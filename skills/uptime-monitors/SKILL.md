@@ -85,7 +85,7 @@ When a user pastes a Datadog `datadog_synthetics_test` (Terraform or JSON), conv
 
 - **One simple assertion → a basic type.** Status-code only → `expected_status_code` (or `status` for 2xx). Body-contains only → `keyword`.
 - **Multiple assertions or a browser test → `playwright`.** Datadog API tests usually assert several things at once (statusCode + body + responseTime), which a basic monitor can't express — generate a Playwright script that makes the request and `expect`s each assertion. Build the request from `request_definition` (method + url) and one `expect` per `assertion` block (`statusCode`, `body`, `responseTime`, …).
-- **Map the fields:** `name` → name / scenario name · `request_definition` → into the script · `options_list.tick_every` → `check_frequency` (round to a valid value) · `locations` → `regions` (Datadog has many; pick the closest subset of `us`/`eu`/`as`/`au`). Datadog's `message`, `monitor_options`, `retry`, and `min_location_failed` have no direct equivalent — say they aren't carried over rather than inventing fields.
+- **Map the fields:** `name` → `pronounceable_name` (or the scenario name in `url` for Playwright) · `request_definition` → into the script · `options_list.tick_every` → `check_frequency` (round to a valid value) · `locations` → `regions` (Datadog has many; pick the closest subset of `us`/`eu`/`as`/`au`). Datadog's `message`, `monitor_options`, `retry`, and `min_location_failed` have no direct equivalent — say they aren't carried over rather than inventing fields.
 - Show the user the script and settings before creating anything; a Playwright scenario goes in through the UI (above).
 
 ## Escalation policies

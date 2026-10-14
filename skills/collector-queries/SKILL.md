@@ -1,6 +1,6 @@
 ---
 name: collector-queries
-description: Proven metrics queries for Better Stack Collector sources (source Platform "Collector") - per-host node_* metrics, per-container and per-service container_resources_*, requests and errors by destination, TCP health, and the container-level saturation checks that host averages hide. Load after metrics-query when the source platform is Collector, for health checks, resource questions and service dashboards.
+description: Proven metrics queries for Better Stack Collector sources (the source tool's Platform "Collector") - per-host node_* metrics, per-container and per-service container_resources_*, requests and errors by destination, TCP health, and the container-level saturation checks that host averages hide. Load after metrics-query when the source platform is Collector, for health checks, resource questions and service dashboards.
 ---
 
 # Collector sources: proven queries
