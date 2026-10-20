@@ -47,14 +47,16 @@ Only certain chart types support alerts:
 
 ### Value (Threshold/Relative)
 
-**Critical**: The `value` must match the data format returned by the chart query.
+**Critical**: The `value` is compared with the raw numbers the chart query returns, not with what the chart displays.
 
-| Chart Data Format  | Example Query                                                   | Alert Value for "85%" |
-| ------------------ | --------------------------------------------------------------- | --------------------- |
-| Percentage (0-100) | `avg(cpu_percent)`                                              | `85`                  |
-| Ratio (0-1)        | `sumIf(logs_count, label('level') = 'error') / sum(logs_count)` | `0.85`                |
+| Chart                                          | Example Query                                                   | Alert Value for "85%" |
+| ---------------------------------------------- | --------------------------------------------------------------- | --------------------- |
+| `unit: "percent"`                              | `sumIf(logs_count, label('level') = 'error') / sum(logs_count)` | `0.85`                |
+| Data already 0-100, without the `percent` unit | `avg(cpu_percent)`                                              | `85`                  |
 
-**Before creating an alert**, check the chart's actual values using `chart` or look at the dashboard to understand the data range.
+A `percent` chart holds 0-1 ratios and multiplies them by 100 for display, so it shows 0.85 as 85% while its alert `value` stays `0.85`. The exception is a `stack_to_100` bar chart: it sets `percent` itself but its query returns raw values, so its thresholds are raw values too. A relative alert's `value` stays a percentage change either way (50 means 50%).
+
+**Before creating an alert**, check the chart's `unit` and actual values using `chart`.
 
 ### Confirmation Period
 
@@ -80,6 +82,30 @@ How far back to look for comparison. Fixed buckets (seconds): `30, 60, 120, 300,
 | `shown_interval`      | seconds                  | Aggregation interval; the training window spans ~10× this (default: 10800 = 3h)                                           |
 
 Don't guess a significance or a threshold: query the chart's data over the past days first (`chart`, then `query`) and say how often the condition would have been met.
+
+## Extra Conditions: Unusual AND Bad
+
+`additional_conditions` ANDs up to 4 more conditions onto the alert's own: it fires only when every
+condition breaches in the same time bucket. Each is `{alert_type, operator, value, series_names,
+series_names_except}`, `threshold` or `relative` only (anomaly detection can be the alert's own type,
+not an extra condition), and each may scope its own series.
+
+**Give every anomaly alert a floor by default.** On its own an anomaly alert fires on anything
+unusual, including harmless shifts: after a node replacement, CPU moving to 21% or a p95 of 76 ms is
+unusual but fine. A threshold condition such as "and CPU > 80" or "and p95 > 500 ms" keeps it to what
+is both unusual and bad. Pick the floor from the chart's real values (`chart`), the way you would a
+threshold alert's `value`.
+
+On `edit_chart_alert` the list replaces the alert's conditions as a whole: omit it to keep them,
+pass `[]` to remove them. `chart_alert` lists them as **Additional Conditions**.
+
+Check a floor the way you would a threshold: query the chart's data over the past days (`chart`, then `query`) and count how often it crosses the floor. The alert fires at most where the metric is both unusual and past the floor.
+
+## Metadata
+
+`metadata` tags the alert, e.g. `{severity: "critical", owner: ["payments"]}`: each value a string or
+a list of strings. The incidents the alert opens carry them. On `edit_chart_alert` it replaces the
+alert's metadata as a whole; `{}` removes it.
 
 ## Series Names
 
@@ -121,7 +147,7 @@ chart_id: 123
 name: "High CPU Usage"
 alert_type: "threshold"
 operator: "higher_than"
-value: 0.90  # Use 90 if chart shows 0-100, use 0.90 if chart shows 0-1
+value: 0.90  # On a `percent` chart (0-1 data shown as 90%); 90 only if the query returns 0-100
 confirmation_period: 60
 ```
 
@@ -137,28 +163,32 @@ query_period: 3600
 confirmation_period: 300
 ```
 
-### Anomaly Detection
+### Anomaly Detection with a Floor
 
 ```
 chart_id: 123
-name: "Unusual Activity"
+name: "CPU unusually high"
 alert_type: "anomaly_rrcf"
 operator: "higher_than"
 anomaly_sensitivity: 5
 shown_interval: 10800
-anomaly_trigger: "any"
+anomaly_trigger: "higher"
+additional_conditions: [{ alert_type: "threshold", operator: "higher_than", value: 0.8 }]  # 80 only if the query returns 0-100
+metadata: { severity: "critical" }
 ```
 
 For anomaly alerts the direction comes from `anomaly_trigger` (`any` = both directions), not from `operator`/`value` (threshold parameters).
 
 ## Common Mistakes
 
-| Mistake                                      | Correct Approach                               |
-| -------------------------------------------- | ---------------------------------------------- |
-| Using relative operators with threshold      | `increases_by` only works with `relative` type |
+| Mistake                                      | Correct Approach                                                 |
+| -------------------------------------------- | ---------------------------------------------------------------- |
+| Using relative operators with threshold      | `increases_by` only works with `relative` type                   |
+| `value: 85` for 85% on a `percent` chart     | Its data is 0-1: use `0.85` (the chart and alert show it as 85%) |
 | Guessing at a significance or threshold      | Query the chart's history first, then quote how often it would fire |
-| No confirmation period for noisy metrics     | Add 60-300s to prevent flapping                |
-| Alerting on all series when only some matter | Specify `series_names` array                   |
+| No confirmation period for noisy metrics     | Add 60-300s to prevent flapping                                  |
+| Alerting on all series when only some matter | Specify `series_names` array                                     |
+| Anomaly alert with no floor                  | Add a threshold in `additional_conditions`                       |
 
 ## Managing Alerts
 
