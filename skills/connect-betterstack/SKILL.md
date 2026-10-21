@@ -91,7 +91,7 @@ Tell the person who asked to forward these steps to their Claude Tag admin.
 
 ## 4. Without OAuth
 
-Where browser sign-in isn't possible (CI, headless runs), the server also accepts a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/) as `Authorization: Bearer <token>`. Point the user to the plugin README for their app's config format. Never ask the user to paste a token into the chat.
+Where browser sign-in isn't possible (CI, headless runs), the server also accepts a Better Stack API token. Point the user to the [API token](https://betterstack.com/docs/getting-started/integrations/mcp/#api-token) section of the MCP docs for their app's setup. Never ask the user to paste a token into the chat.
 
 ## 5. After connecting
 

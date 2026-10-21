@@ -68,24 +68,9 @@ OAuth is the recommended flow. Run `/mcp`, select the Better Stack server and si
 
 If the tools aren't connected, the plugin's **connect-betterstack** skill tells you how to connect in the app you're using (Claude Code, the Claude apps or Claude Tag) instead of failing quietly. You can also ask it directly: *"Set up Better Stack."*
 
-### Prefer API token over OAuth? 
+### Prefer an API token?
 
-Get a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/).
-Then pass it via the `Authorization` header:
-
-```json
-{
-  "mcpServers": {
-    "betterstack": {
-      "type": "http",
-      "url": "https://mcp.betterstack.com",
-      "headers": {
-        "Authorization": "Bearer <your-better-stack-api-token>"
-      }
-    }
-  }
-}
-```
+Where browser sign-in isn't possible, such as in CI or headless runs, the server also accepts a Better Stack API token. The [API token](https://betterstack.com/docs/getting-started/integrations/mcp/#api-token) section of the MCP docs shows how to set it up.
 
 ## Skills
 
