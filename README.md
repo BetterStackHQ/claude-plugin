@@ -4,7 +4,13 @@ Connect Claude Code to your [Better Stack](https://betterstack.com) Incidents an
 
 ## Install
 
-Install plugin from Claude Code marketplace:
+Better Stack is in Anthropic's plugin directory, which Claude Code has built in:
+
+```text
+/plugin install better-stack
+```
+
+Or install it from this repository's marketplace:
 
 ```text
 /plugin marketplace add BetterStackHQ/claude-plugin
@@ -108,7 +114,7 @@ The plugin comes with skills that teach your agent how to work with Better Stack
 
 ## Use in Claude chat and Cowork
 
-1. Go to **Customize > Plugins** ([claude.ai/customize/plugins](https://claude.ai/customize/plugins)) and add **Better Stack**.
+1. Open [**Better Stack** in Customize > Plugins](https://claude.ai/customize/plugins/id/a028f8c7-0c25-4976-b0e1-dc8f728ff108%40anthropic-plugin-directory) and add it.
 2. On the plugin's **Connectors** tab, add or connect the Better Stack server (`https://mcp.betterstack.com`) and sign in with your Better Stack account.
 3. Start a new chat.
 
