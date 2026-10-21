@@ -64,7 +64,7 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 ### Claude Code
 
 1. Run `/mcp`, select the Better Stack server (from the plugin it shows as `plugin:betterstack:betterstack`) and follow the steps to sign in in the browser. From a terminal: `claude mcp login plugin:betterstack:betterstack`, or `claude mcp login betterstack` if the server was added by hand. `claude mcp list` shows the exact name.
-2. If the server isn't listed, install the plugin (`/plugin marketplace add BetterStackHQ/claude-plugin`, then `/plugin install betterstack@betterstack`) or add it: `claude mcp add --transport http betterstack https://mcp.betterstack.com`.
+2. If the server isn't listed, install the plugin from Anthropic's plugin directory, which Claude Code has built in: `/plugin install better-stack`. Or add the server: `claude mcp add --transport http betterstack https://mcp.betterstack.com`.
 3. Start a new session, or run `/mcp` again to check it shows as connected.
 
 In a Claude Code cloud session, connect Better Stack at [claude.ai/customize/connectors](https://claude.ai/customize/connectors) instead.
@@ -73,7 +73,7 @@ In a Claude Code cloud session, connect Better Stack at [claude.ai/customize/con
 
 The plugin's skills load in chat right away, but its MCP server works only after it's connected on the plugin's **Connectors** tab:
 
-1. Go to **Customize > Plugins** ([claude.ai/customize/plugins](https://claude.ai/customize/plugins)) and open **Better Stack**.
+1. Open [**Better Stack** in Customize > Plugins](https://claude.ai/customize/plugins/id/a028f8c7-0c25-4976-b0e1-dc8f728ff108%40anthropic-plugin-directory) and add it, or open it if it's already added.
 2. On its **Connectors** tab, add or connect the Better Stack server (`https://mcp.betterstack.com`) and sign in with your Better Stack account.
 3. Start a new chat.
 
