@@ -68,10 +68,6 @@ OAuth is the recommended flow. Run `/mcp`, select the Better Stack server and si
 
 If the tools aren't connected, the plugin's **connect-betterstack** skill tells you how to connect in the app you're using (Claude Code, the Claude apps or Claude Tag) instead of failing quietly. You can also ask it directly: *"Set up Better Stack."*
 
-### Prefer an API token?
-
-Where browser sign-in isn't possible, such as in CI or headless runs, the server also accepts a Better Stack API token. The [API token](https://betterstack.com/docs/getting-started/integrations/mcp/#api-token) section of the MCP docs shows how to set it up.
-
 ## Skills
 
 The plugin comes with skills that teach your agent how to work with Better Stack. It loads each one when the task calls for it.
@@ -109,19 +105,12 @@ The skills work as soon as the plugin is added, but the Better Stack tools only 
 
 [Claude Tag](https://claude.com/docs/claude-tag/overview) can use Better Stack as an on-call first responder in your incident channels. An admin sets it up once in an Access bundle at [claude.ai/admin-settings/claude-tag](https://claude.ai/admin-settings/claude-tag). Connect a dedicated Better Stack user rather than a personal login, because everyone in the covered channels acts through it.
 
-**Option A, with a Better Stack custom connector your organization already added on claude.ai:**
-
-1. Open the bundle's **Credentials** tab, click **Connect** next to **Custom tool** and choose the **MCP Connector** credential type.
-2. Pick Better Stack and sign in once as the dedicated Better Stack user.
-
-**Option B, with an API token:**
+Better Stack has to be added as a connector for your organization on claude.ai first. Then:
 
 1. On the bundle's **Plugins** tab, add this plugin. It points Claude at `https://mcp.betterstack.com` and brings the investigate-incident skill.
-2. On the **Credentials** tab, click **Connect** next to **Custom tool**, choose **Bearer**, paste a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/) and set **Allowed websites** to `mcp.betterstack.com`.
+2. On the **Credentials** tab, click **Connect** next to **Custom tool**, choose **MCP Connector**, pick Better Stack and sign in once as the dedicated Better Stack user.
 
 To check it, start a new thread in a channel the bundle covers and ask *"@Claude list open Better Stack incidents and the errors from the last hour."*
-
-For investigation-only access, limit the tools with the `X-MCP-Tools-Except` header below. On the Bearer credential, set it under **Custom headers**.
 
 ## Limiting available tools
 
