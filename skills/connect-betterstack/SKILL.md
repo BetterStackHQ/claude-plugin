@@ -84,15 +84,11 @@ On Team and Enterprise plans, an Owner adds the connector for the organization f
 People in the channel can't connect it from the thread. A Claude Tag admin sets it up once in an Access bundle at [claude.ai/admin-settings/claude-tag](https://claude.ai/admin-settings/claude-tag), with a dedicated Better Stack user rather than a personal login, because everyone in the covered channels acts through it:
 
 1. On the bundle's **Plugins** tab, add the Better Stack plugin.
-2. On the **Credentials** tab, click **Connect** next to **Custom tool**. Either choose **MCP Connector**, pick Better Stack and sign in as the dedicated user, or choose **Bearer**, paste a Better Stack [API token](https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/) and set **Allowed websites** to `mcp.betterstack.com`.
+2. On the **Credentials** tab, click **Connect** next to **Custom tool**. Choose **MCP Connector**, pick Better Stack and sign in as the dedicated user.
 3. Start a new thread in a covered channel and ask "@Claude list open Better Stack incidents".
 
 Tell the person who asked to forward these steps to their Claude Tag admin.
 
-## 4. Without OAuth
-
-Where browser sign-in isn't possible (CI, headless runs), the server also accepts a Better Stack API token. Point the user to the [API token](https://betterstack.com/docs/getting-started/integrations/mcp/#api-token) section of the MCP docs for their app's setup. Never ask the user to paste a token into the chat.
-
-## 5. After connecting
+## 4. After connecting
 
 Once the tools show up, confirm with one read-only call, tell the user it works, and go back to what they originally asked. Setup and full docs: [Better Stack MCP](https://betterstack.com/docs/getting-started/integrations/mcp/).
