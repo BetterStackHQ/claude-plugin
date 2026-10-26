@@ -77,6 +77,25 @@ Funnels (`funnel_chart`, `funnel_trend_chart`) are not dashboard charts: they li
 | `auto`    | Auto-detect                                | varies                |
 | `none`    | Raw number                                 | 1234.56               |
 
+### Percent takes 0-1 ratios
+
+`unit: "percent"` multiplies the query's value by 100, so the query must return a 0-1 ratio. Never multiply by 100 in the query: `* 100` with `percent` renders 75% as 7500%. When a metric is already reported 0-100 (e.g. `cpu_percent`), divide it by 100.
+
+```sql
+-- GOOD: system_cpu_utilization_ratio is 0-1, so 0.75 renders as 75%
+avgMerge(value_avg) AS "CPU usage"
+
+-- BAD with unit: "percent": renders 75% as 7500%
+avgMerge(value_avg) * 100 AS "CPU usage"
+
+-- GOOD: a metric that is already 0-100, divided back to 0-1
+avgMerge(value_avg) / 100 AS "CPU usage"
+```
+
+Every number you set on a `percent` chart is a 0-1 ratio too: `y_axis_max: 1`, gauge `max: 1`, `color_upper_threshold: 0.9`, and a chart alert's threshold `value: 0.9` for 90%.
+
+The exception is `stacking: "stack_to_100"` on a bar chart: it sets `percent` itself and scales each bar to 100% when drawing, so its query returns raw values (counts, not shares).
+
 ## Column Mapping
 
 ### Core Columns
@@ -169,11 +188,11 @@ Allowed per chart type: `line_chart` time/value; `bar_chart` and `heatmap_chart`
 
 ## Stacking (`stacking`) - Line/Bar Charts
 
-| Value          | Behavior                                        |
-| -------------- | ----------------------------------------------- |
-| `dont_stack`   | Overlapping series (line default)               |
-| `stack`        | Stacked series (bar default)                    |
-| `stack_to_100` | Percentage stacking (auto-sets unit to percent) |
+| Value          | Behavior                                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `dont_stack`   | Overlapping series (line default)                                                                                                         |
+| `stack`        | Stacked series (bar default)                                                                                                              |
+| `stack_to_100` | Percentage stacking: sets `percent` itself and scales each bar to 100% when drawing, so its query returns raw values (counts, not shares) |
 
 **Rule**: Stack only series that are **non-overlapping parts of a whole** (e.g. memory `Used + Cache + Free` — and exclude the `Total` series itself, it double-counts its parts). The full stack-vs-don't decision rules (including the default-to-stack style for line charts) live in the `dashboard-builder` skill's Stacking Rules — when both skills are loaded, follow those.
 
@@ -287,6 +306,7 @@ Shows as a tooltip next to the chart title. Use rarely — charts must be compre
 | Mistake                                                                         | Correct Approach                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `y_axis_max: 100` for 0-1 ratio                                                 | Use `y_axis_max: 1`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `* 100` in the query with `unit: "percent"`                                     | Return the 0-1 ratio: `percent` multiplies by 100 itself, so `* 100` shows 100x too much                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Forgetting `series_column`                                                      | Set when query has grouping column                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | Using `%` as unit                                                               | Use `percent`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Using `bytes` as unit                                                           | Use `B_si` or `B_iec`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
