@@ -71,11 +71,11 @@ Funnels (`funnel_chart`, `funnel_trend_chart`) are not dashboard charts: they li
 
 ### Other
 
-| Unit      | Description                | Example Output |
-| --------- | -------------------------- | -------------- |
-| `percent` | Percentage (0-1 to 0-100%) | 75%            |
-| `auto`    | Auto-detect                | varies         |
-| `none`    | Raw number                 | 1234.56        |
+| Unit      | Description                                | Example Output        |
+| --------- | ------------------------------------------ | --------------------- |
+| `percent` | A 0-1 ratio, multiplied by 100 for display | `0.75` renders as 75% |
+| `auto`    | Auto-detect                                | varies                |
+| `none`    | Raw number                                 | 1234.56               |
 
 ## Column Mapping
 
@@ -145,10 +145,10 @@ Allowed per chart type: `line_chart` time/value; `bar_chart` and `heatmap_chart`
 
 ### Y-Axis Bounds
 
-| Setting      | Purpose       | Example                                   |
-| ------------ | ------------- | ----------------------------------------- |
-| `y_axis_min` | Force minimum | `0` for percentages                       |
-| `y_axis_max` | Force maximum | `1` for 0-1 ratios, `100` for percentages |
+| Setting      | Purpose       | Example                                                                |
+| ------------ | ------------- | ---------------------------------------------------------------------- |
+| `y_axis_min` | Force minimum | `0` for percentages                                                    |
+| `y_axis_max` | Force maximum | `1` with `unit: "percent"` (0-1 data), `100` for 0-100 data without it |
 
 **Important**: For percentage data calculated as ratio (0-1), set `y_axis_max: 1`, NOT `100`.
 
