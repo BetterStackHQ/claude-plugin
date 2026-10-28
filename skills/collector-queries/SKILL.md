@@ -5,7 +5,7 @@ description: Proven metrics queries for Better Stack Collector sources (the sour
 
 # Collector sources: proven queries
 
-Taken from the Hosts and Services dashboard templates; every metric and label below was verified on a live Collector source. Queries use `{{source}}`, `{{time}}`, `{{start_time}}`, `{{end_time}}` exactly as `metrics-query` describes: as written in dashboard charts, substituted in ad-hoc `query` calls.
+Taken from the Hosts and Services dashboard templates; every metric and label below was verified on a live Collector source. Queries use `{{source}}`, `{{time}}`, `{{start_time}}`, `{{end_time}}` exactly as `metrics-query` describes.
 
 ## What the collector emits
 

@@ -7,10 +7,10 @@ description: Load BEFORE querying Better Stack exception or error-pattern data w
 
 ## Where the query runs
 
-Better Stack runs SQL in two places, and the query text differs:
+Better Stack runs SQL in two places, and both take the query as this skill writes it, with the template variables `{{source}}`, `{{time}}`, `{{start_time}}` and `{{end_time}}`:
 
-- **Dashboard charts and chart alerts** (`add_chart_to_dashboard`, `edit_chart`, `create_chart_alert`): write the query as this skill shows it, with the template variables `{{source}}`, `{{time}}`, `{{start_time}}` and `{{end_time}}`. The dashboard resolves them. Chart queries always read the source's metrics collection.
-- **Ad-hoc queries** (`query`, `render_chart`): there are no template variables. First call the help tool for the data type with the source ID (`query_help` for logs and spans, `metrics_query_help` for metrics, `errors_query_help` for errors): it names the source's collections and the table to pass. Put the collection where `{{source}}` stands (e.g. `remote(t123_my_app_logs)` for the last ~30 minutes, `s3Cluster(primary, t123_my_app_s3)` with its row-type filter for older rows), a bucket such as `toStartOfInterval(dt, INTERVAL 5 MINUTE)` where `{{time}}` stands, and concrete bounds such as `dt > now() - INTERVAL 3 HOUR` for `{{start_time}}` and `{{end_time}}`. Add a `LIMIT`, and call `query_windows` before an `s3Cluster(...)` query over more than a few hours.
+- **Dashboard charts and chart alerts** (`add_chart_to_dashboard`, `edit_chart`, `create_chart_alert`): the dashboard resolves the variables. Chart queries always read the source's metrics collection.
+- **Ad-hoc queries** (`query`, `render_chart`): pass `source_id`, `source_type` (`logs`, `spans`, `metrics`, `web_events` or `exceptions`), `start_time` and `end_time` (`now-3h`, `now-1d`, or an ISO 8601 datetime) and no `table`; the tool builds the source's collections for `{{source}}` and resolves `{{time}}` to a bucket that suits the range. First call the help tool for the data type with the source ID (`query_help` for logs and spans, `metrics_query_help` for metrics, `errors_query_help` for errors) for the syntax, and add a `LIMIT`. A template that lists the newest rows (`ORDER BY dt DESC LIMIT n`, no aggregate, `GROUP BY`, `DISTINCT` or subquery), or one that only aggregates (`count()`, `countIf()`, `sum()`, `sumIf()`, `min()` or `max()` beside its `GROUP BY` columns, no `HAVING`, `DISTINCT` or subquery) over at most 300,000,000 rows, needs one `query` call however wide its range when its time filter is `dt >= {{start_time}} AND dt < {{end_time}}` (not `BETWEEN`, which would count a row on a window boundary twice): `query` reads the range in time windows itself, merges the rows and says how far it read. Before any other query over more than a few hours of events, and before `render_chart` over such a range, call `query_windows` with the same arguments: it says whether the range fits one call and, if not, the windows to pass as `start_time` and `end_time`.
 
 Error tracking has two data planes:
 
@@ -20,7 +20,7 @@ Error tracking has two data planes:
 
 ## Exception metrics (counts, trends, first/last seen)
 
-Query the application's metrics collection (`errors_query_help` names it). The schema is **fixed for all Errors sources** - query it directly, no field discovery needed:
+Query the source's metrics table (`source_type: 'metrics'`). The schema is **fixed for all Errors sources** - query it directly, no `source_fields` discovery needed:
 
 - **Count exceptions with `sum(exceptions_count)`.** `exceptions_count` is a plain `UInt64` per-row column: the number of exceptions in that row. Aggregate it with `sum(...)`, **never** `countMerge(...)` (it is not an aggregate-state column). It self-scopes - it is `0` on non-exception rows - so you do **not** need a `_row_type` filter to isolate exceptions.
 - **Never count exceptions with `countMerge(events_count)`.** `events_count` totals _every_ row type (spans, logs, web events, exceptions) and double-counts span event vs. duration rows, so it over-counts exceptions. Reach for it only when you deliberately want all row types at once.
@@ -74,7 +74,7 @@ Add `{{time}} AS time, ... GROUP BY time` bucketing to trend any of these per er
 
 ## Raw exception events (stack traces, payloads)
 
-`query` over the application's raw exception rows (`errors_query_help` names the collection and its row-type filter). Raw-JSON dialect like logs: event payload in the `raw` column read with `JSONExtractCaseInsensitive(raw, ...)`, the same `pattern` column for filtering, `dt` timestamps. Use a narrow time window around a known occurrence (e.g. `maxMerge(seen_at_max)` from the metrics query) - full-range scans over raw exceptions are slow.
+`query` with `source_type: 'exceptions'`. Raw-JSON dialect like logs: event payload in the `raw` column read with `JSONExtractCaseInsensitive(raw, ...)`, the same `pattern` column for filtering, `dt` timestamps. Use a narrow time window around a known occurrence (e.g. `maxMerge(seen_at_max)` from the metrics query) - full-range scans over raw exceptions are slow.
 
 Build exception trend charts from the metrics collection (queries above). Raw exceptions are for `query` drill-downs: stack traces, payload inspection, sample events.
 

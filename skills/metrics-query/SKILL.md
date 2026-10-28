@@ -9,10 +9,10 @@ Metrics tables hold pre-aggregated ClickHouse state columns. Below are the facts
 
 ## Where the query runs
 
-Better Stack runs SQL in two places, and the query text differs:
+Better Stack runs SQL in two places, and both take the query as this skill writes it, with the template variables `{{source}}`, `{{time}}`, `{{start_time}}` and `{{end_time}}`:
 
-- **Dashboard charts and chart alerts** (`add_chart_to_dashboard`, `edit_chart`, `create_chart_alert`): write the query as this skill shows it, with the template variables `{{source}}`, `{{time}}`, `{{start_time}}` and `{{end_time}}`. The dashboard resolves them. Chart queries always read the source's metrics collection.
-- **Ad-hoc queries** (`query`, `render_chart`): there are no template variables. First call the help tool for the data type with the source ID (`query_help` for logs and spans, `metrics_query_help` for metrics, `errors_query_help` for errors): it names the source's collections and the table to pass. Put the collection where `{{source}}` stands (e.g. `remote(t123_my_app_logs)` for the last ~30 minutes, `s3Cluster(primary, t123_my_app_s3)` with its row-type filter for older rows), a bucket such as `toStartOfInterval(dt, INTERVAL 5 MINUTE)` where `{{time}}` stands, and concrete bounds such as `dt > now() - INTERVAL 3 HOUR` for `{{start_time}}` and `{{end_time}}`. Add a `LIMIT`, and call `query_windows` before an `s3Cluster(...)` query over more than a few hours.
+- **Dashboard charts and chart alerts** (`add_chart_to_dashboard`, `edit_chart`, `create_chart_alert`): the dashboard resolves the variables. Chart queries always read the source's metrics collection.
+- **Ad-hoc queries** (`query`, `render_chart`): pass `source_id`, `source_type` (`logs`, `spans`, `metrics`, `web_events` or `exceptions`), `start_time` and `end_time` (`now-3h`, `now-1d`, or an ISO 8601 datetime) and no `table`; the tool builds the source's collections for `{{source}}` and resolves `{{time}}` to a bucket that suits the range. First call the help tool for the data type with the source ID (`query_help` for logs and spans, `metrics_query_help` for metrics, `errors_query_help` for errors) for the syntax, and add a `LIMIT`. A template that lists the newest rows (`ORDER BY dt DESC LIMIT n`, no aggregate, `GROUP BY`, `DISTINCT` or subquery), or one that only aggregates (`count()`, `countIf()`, `sum()`, `sumIf()`, `min()` or `max()` beside its `GROUP BY` columns, no `HAVING`, `DISTINCT` or subquery) over at most 300,000,000 rows, needs one `query` call however wide its range when its time filter is `dt >= {{start_time}} AND dt < {{end_time}}` (not `BETWEEN`, which would count a row on a window boundary twice): `query` reads the range in time windows itself, merges the rows and says how far it read. Before any other query over more than a few hours of events, and before `render_chart` over such a range, call `query_windows` with the same arguments: it says whether the range fits one call and, if not, the windows to pass as `start_time` and `end_time`.
 
 ## Shape of a query
 
@@ -156,8 +156,8 @@ GROUP BY "Container" ORDER BY "RSS" DESC LIMIT 15
 - `avgMerge(value_avg, cond)`: a condition needs the `-If` form, `avgMergeIf(value_avg, cond)`. `countMerge(events_count, cond)` is a per-row-type count instead: `sumIf(logs_count, cond)`.
 - `WHERE name IN ('provider', 'event_type')` after the user called their logs-to-metrics labels "metrics": 0 rows. They are labels: `sum(logs_count)` grouped by `label('provider')`.
 - `concat(label('provider'), ' / ', label('event_type')) AS series` when some events lack `event_type`: `label()` of a missing key is NULL and `concat` with a NULL is NULL, so those events land in a "null" series. Wrap optional labels: `ifNull(label('event_type'), 'none')`.
-- `{{level}}`, `{{service}}` or any other custom variable outside a dashboard: custom `{{var}}` and `[[ ... ]]` blocks exist only in dashboard charts, and `query` takes no template variables at all.
-- `JSONExtract(raw, ...)` against the metrics collection: it has no `raw`; query the extracted label, or query the logs collection instead.
+- `{{level}}`, `{{service}}` or any other variable in `query`: only `{{source}}`, `{{time}}`, `{{start_time}}`, `{{end_time}}` exist there; custom `{{var}}` and `[[ ... ]]` blocks are dashboard-only.
+- `JSONExtract(raw, ...)` with `source_type: "metrics"`: the metrics table has no `raw`; query the extracted label, or switch to `source_type: "logs"`.
 - `WHERE metric_name = ...` or `metric = ...`: the column is `name`.
 - `AS value` on a chart query: the legend reads "value".
 - `avgMerge(value_avg)` for a percentile: that is the average; use `histogramQuantile`.
