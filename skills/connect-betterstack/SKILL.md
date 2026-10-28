@@ -14,7 +14,9 @@ Look at the tools you have right now.
 - **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `documentation`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
 - **Not connected:** no Better Stack tools at all, only an `authenticate` tool for Better Stack, or a call that fails with `unauthorized`, 401, 403 or "needs authentication".
 
-If you have a Better Stack `authenticate` tool (Claude Code exposes one for claude.ai connectors that aren't signed in), call it and give the user the sign-in link it returns. After they sign in, call `complete_authentication` if that tool exists, then check again.
+Several Better Stack servers can show up at once: in Claude, the Better Stack connector (tool names starting with `mcp__claude_ai_`), the plugin's own server (`mcp__plugin_betterstack_betterstack__`), and servers the user added by hand under names of their own. If any one of them answers, Better Stack is connected: use it, and don't mention the others that fail or need a sign-in. When more than one answers, use the connector, then the plugin's server.
+
+If you have a Better Stack `authenticate` tool for the connector or the plugin's server, call it and give the user the sign-in link it returns. After they sign in, call `complete_authentication` if that tool exists, then check again. Never ask the user to sign in to servers they added by hand: they set those up themselves, so give the steps for their app below instead.
 
 Never make up incidents, monitors, logs or metrics while Better Stack isn't connected. Say it isn't connected and give the steps below.
 
@@ -63,11 +65,13 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 
 ### Claude Code
 
-1. Run `/mcp`, select the Better Stack server (from the plugin it shows as `plugin:betterstack:betterstack`) and follow the steps to sign in in the browser. From a terminal: `claude mcp login plugin:betterstack:betterstack`, or `claude mcp login betterstack` if the server was added by hand. `claude mcp list` shows the exact name.
-2. If the server isn't listed, install the plugin from Anthropic's plugin directory, which Claude Code has built in: `/plugin install better-stack`. Or add the server: `claude mcp add --transport http betterstack https://mcp.betterstack.com`.
-3. Start a new session, or run `/mcp` again to check it shows as connected.
+Claude Code signed in with a Claude account, in the terminal, the Claude app's Code tab or a cloud session, gets Better Stack through the Better Stack connector. Give these steps even when other Better Stack servers are configured, and don't send the user to `/mcp` to sign in to those.
 
-In a Claude Code cloud session, connect Better Stack at [claude.ai/customize/connectors](https://claude.ai/customize/connectors) instead.
+1. Open **Settings** > **Connectors** in the Claude app, or [claude.ai/customize/connectors](https://claude.ai/customize/connectors).
+2. Click **Connect** next to Better Stack. It's listed as **mcp.betterstack.com**. If it isn't listed, add it from [claude.com/connectors/betterstack](https://claude.com/connectors/betterstack).
+3. Sign in with your Better Stack account, then start a new session.
+
+Claude Code signed in with an API key or through a cloud provider has no connectors. There, run `/mcp`, select `plugin:betterstack:betterstack` and sign in in the browser, then start a new session.
 
 ### Claude chat and Cowork (claude.ai, the desktop app, mobile)
 
