@@ -52,7 +52,7 @@ Form a hypothesis based on the symptom:
 - metrics: `metrics_schema` (filter by name, e.g. `*latency*`, `*memory*`) and `metrics_query_help`
 - errors: `errors_query_help` (for custom error analytics beyond `errors` and `error`)
 
-Then run the SQL with `query`. Bound every query in time, and call `query_windows` before querying more than a few hours.
+Then run the SQL with `query`, written as a template (`FROM {{source}}`, `WHERE dt >= {{start_time}} AND dt < {{end_time}}`) with `source_type`, `start_time` and `end_time`. Bound every query in time. A list of the newest rows, or an aggregate of only `count()`, `sum()`, `min()` or `max()` by its `GROUP BY` columns, needs one call however wide the range: `query` reads it in time windows itself and says how far it read. Before any other query over more than a few hours, call `query_windows` with the same arguments.
 
 **Metrics:**
 - Resource saturation: CPU, memory, disk, network
