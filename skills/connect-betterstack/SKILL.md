@@ -1,6 +1,6 @@
 ---
 name: connect-betterstack
-description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `documentation`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack).
+description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `documentation`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack). Once connected, suggests what to set up next from what the account has, such as Claude investigating every new incident or fixing errors on a schedule. Also use when the user asks what Better Stack can do for them.
 ---
 
 # Connect Better Stack
@@ -91,4 +91,21 @@ Tell the person who asked to forward these steps to their Claude Tag admin.
 
 ## 4. After connecting
 
-Once the tools show up, confirm with one read-only call, tell the user it works, and go back to what they originally asked. Setup and full docs: [Better Stack MCP](https://betterstack.com/docs/getting-started/integrations/mcp/).
+Once the tools show up, confirm with one read-only call and tell the user it works. If they came with a request, go back to it now and skip the rest of this section. Setup and full docs: [Better Stack MCP](https://betterstack.com/docs/getting-started/integrations/mcp/).
+
+## 5. Suggest what to set up next
+
+When the user only asked to set up or connect Better Stack, or what it can do, end by offering the setups that fit their account.
+
+1. Look at the account with a few read-only calls: `incidents` with `from` 30 days ago, `applications`, then `errors` with `start_time: "now-7d"` for up to 3 applications, and `sources`. Don't list what you read.
+2. Offer at most three setups from the table below whose condition the account meets and that work where you are running. Give each one line that says what it does and what you saw that makes it worth it, for example "You had 14 incidents in the last 30 days." Ask which they want.
+3. Set nothing up until the user picks one.
+
+| Setup | Offer it when | Works in | How to set it up |
+| --- | --- | --- | --- |
+| **Page Claude for your incidents**: Claude investigates each new incident as it starts and comments the likely cause and next step on it | the account had incidents in the last 30 days | Claude: Claude Code, or the Code tab at claude.ai/code | Follow the prompt under "Page Claude for your incidents" in the docs |
+| **Fix errors on a schedule**: every 4 hours, Claude fixes the obvious new errors with pull requests the user reviews | an error tracking application has unresolved errors from the last 7 days | Claude: Claude Code, in the app's repository | Follow the prompt under "Fix errors on a schedule with Claude" in the docs |
+| **Investigate an incident now**: root cause from the logs, metrics, traces, errors and recent changes around it | an incident is ongoing right now | everywhere | The investigate-incident skill |
+| **Health check**: CPU, memory, disk, log levels and dependencies of a server or service, with charts | the account has log or metrics sources | everywhere | The health-check skill |
+
+The two Claude setups come with prompts in the docs: read https://betterstack.com/docs/getting-started/integrations/mcp/claude.md word for word (with a shell, print it with `curl -s`; don't save it as `claude.md`, which Claude Code on macOS loads as `CLAUDE.md`), and carry out the prompt under the setup's heading as if the user had pasted it. In Claude chat outside the Code tab, tell the user to open the Code tab in their app's repository and ask there.

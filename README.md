@@ -66,7 +66,7 @@ The complete tool reference and example prompts live in the [Better Stack MCP in
 
 OAuth is the recommended flow. Run `/mcp`, select the Better Stack server and sign in through your browser. No token configuration needed.
 
-If the tools aren't connected, the plugin's **connect-betterstack** skill tells you how to connect in the app you're using (Claude Code, the Claude apps or Claude Tag) instead of failing quietly. You can also ask it directly: *"Set up Better Stack."*
+If the tools aren't connected, the plugin's **connect-betterstack** skill tells you how to connect in the app you're using (Claude Code, the Claude apps or Claude Tag) instead of failing quietly. You can also ask it directly: *"Set up Better Stack."* Once connected, it looks at your account and suggests what to set up next, such as Claude investigating every new incident or fixing your errors on a schedule.
 
 ## Skills
 
