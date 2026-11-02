@@ -1,6 +1,6 @@
 ---
 name: connect-betterstack
-description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `documentation`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Claude Code, Claude chat and Cowork, Claude Tag in Slack). Once connected, suggests what to set up next from what the account has, such as Claude investigating every new incident or fixing errors on a schedule. Also use when the user asks what Better Stack can do for them.
+description: Connect the Better Stack MCP server and check that it works. Use when the user installs the Better Stack plugin or asks to set it up, when a Better Stack request comes in but no Better Stack tools (such as `incidents`, `monitors`, `query`, `documentation`) are available, or when a Better Stack tool fails with "unauthorized", 401 or "needs authentication". Tells the user exactly how to connect in the app they are using (ChatGPT, Codex, Cursor, Antigravity, Claude Code, Claude chat and Cowork, Claude Tag in Slack). Once connected, suggests what to set up next from what the account has, such as Claude investigating every new incident or fixing errors on a schedule. Also use when the user asks what Better Stack can do for them.
 ---
 
 # Connect Better Stack
@@ -37,6 +37,7 @@ Use what you know about your environment: your system prompt, your tool names, w
 | You are ChatGPT, in chatgpt.com or the ChatGPT app, no shell | ChatGPT |
 | You are Codex, or you have a shell and `codex` is installed | Codex |
 | You are in Cursor, or tool names look like Cursor's | Cursor |
+| You are Antigravity, Google's agent, in its app, IDE or `agy` CLI | Antigravity |
 | You are Claude Code, you have a shell, tool names start with `mcp__` | Claude Code |
 | You are in a Slack channel or thread (Claude Tag) | Claude Tag |
 | You are Claude in claude.ai chat, Cowork, the desktop app or the mobile app, no shell | Claude chat and Cowork |
@@ -70,6 +71,15 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 2. Open **Customize** in the sidebar, find **betterstack** under MCP and make sure it's turned on.
 3. Sign in when Cursor asks (it opens the browser for Better Stack's sign-in). If it doesn't ask, turn the server off and on again.
 4. Start a new chat.
+
+### Antigravity
+
+1. Open the settings with Cmd + , (Ctrl + , on Windows and Linux) and go to the **Customizations** tab.
+2. Click **Authenticate** next to the Better Stack server and sign in with your Better Stack account in the browser.
+3. Copy the authorization code the browser shows, paste it in the settings panel and click **Submit**.
+4. Start a new conversation.
+
+If there is no Better Stack server at all, install the plugin: `agy plugin install https://github.com/BetterStackHQ/antigravity-plugin`.
 
 ### Claude Code
 
