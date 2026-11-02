@@ -13,9 +13,25 @@ Chart alerts monitor metrics and logs queries and trigger incidents when conditi
 
 | Type           | Use Case                                                     | Key Parameters                                             |
 | -------------- | ------------------------------------------------------------ | ---------------------------------------------------------- |
-| `threshold`    | Known fixed limit exceeded (CPU > 90%, errors > 100)         | `value`, `operator`                                        |
-| `relative`     | Value changes by percentage vs. the past (traffic drops 50%) | `value`, `operator`, `query_period`                        |
-| `anomaly_rrcf` | Unpredictable patterns, no known threshold (ML-based)        | `shown_interval`, `anomaly_sensitivity`, `anomaly_trigger` |
+| `threshold`    | Known fixed limit exceeded (disk > 90%, error rate > 5%)     | `value`, `operator`                                        |
+| `relative`     | Change in % vs. the past, when the user asks for one         | `value`, `operator`, `query_period`                        |
+| `anomaly_rrcf` | Unusual patterns (ML-based), with a floor by default (below) | `shown_interval`, `anomaly_sensitivity`, `anomaly_trigger` |
+
+## What to Alert On
+
+Unless the user asks otherwise, every alert fires only on something both bad and unusual:
+
+- **Outcomes, not activity**: orders completed, jobs finished, age of the oldest queued job. A stuck
+  worker that retries every 2 s keeps emitting spans and requests while nothing gets done.
+- **Saturation** (memory, disk, connection pools): `threshold`, since it is bad at the same level every day.
+- **Customer impact** (error rate, latency, failed checkouts, orders dropping): `threshold`; for a
+  drop, `lower_than` a value under the quietest normal hour. An anomaly or relative alert learns a
+  sustained change as the new normal and resolves within about an hour while the outage goes on.
+- **Anything else unusual**: `anomaly_rrcf` with a floor.
+- **Slices**: group error and latency charts by endpoint or error type. Each series is checked on its
+  own, so a failure in one slice crosses the bar instead of hiding in the whole-traffic average.
+- **Low-traffic services** (a few requests per second or fewer): a ratio jumps on a handful of
+  requests; alert on error counts instead.
 
 ## Operators
 
@@ -69,6 +85,15 @@ How long the condition must be resolved before the incident is closed. Same fixe
 - Set equal to or higher than confirmation_period
 - Prevents alert flapping
 
+### Missing Data
+
+`on_missing_data` is what a threshold or relative alert does when its chart returns no data: `dont_fire`
+(default), `treat_as_zero`, `treat_as_previous`, or `start_incident`. Use `start_incident` on throughput and
+outcome charts (requests, orders completed): when that data stops, the service is down, and `dont_fire`
+would resolve any open incident and stay quiet. On a sparse chart (a few orders an hour), empty buckets
+in quiet hours open incidents too: widen `aggregation_interval` there, or keep `dont_fire`. Anomaly
+alerts take it from the chart and refuse it.
+
 ### Query Period (Relative Alerts)
 
 How far back to look for comparison. Fixed buckets (seconds): `30, 60, 120, 300, 600, 1800, 3600` — **capped at 1 hour**; "vs 1 day/week ago" comparisons are not possible.
@@ -86,7 +111,8 @@ Don't guess a significance or a threshold: query the chart's data over the past 
 ## Extra Conditions: Unusual AND Bad
 
 `additional_conditions` ANDs up to 4 more conditions onto the alert's own: it fires only when every
-condition breaches in the same time bucket. Each is `{alert_type, operator, value, series_names,
+condition breaches in the same time bucket, on any of the series it covers, not necessarily the same
+one. On a grouped chart, an unscoped floor is met by whichever series crosses it. Each is `{alert_type, operator, value, series_names,
 series_names_except}`, `threshold` or `relative` only (anomaly detection can be the alert's own type,
 not an extra condition), and each may scope its own series.
 
@@ -121,7 +147,7 @@ Monitor specific series or all:
 | -------------------------- | --------------------------------------------------------- |
 | `current_team`             | Default on-call for the team                              |
 | `gid://uptime/Policy/<id>` | A specific escalation policy (from `escalation_policies`) |
-| `gid://uptime/Team/<id>`   | A specific team's default on-call                   |
+| `gid://uptime/Team/<id>`   | A specific team's default on-call                         |
 
 To match a Datadog monitor's notification routing, call `escalation_policies` and pass the closest policy's gid.
 
@@ -134,33 +160,36 @@ To match a Datadog monitor's notification routing, call `escalation_policies` an
 | `sms`   | `false` | Urgent issues        |
 | `call`  | `false` | Critical outages     |
 
+Unless the user asks otherwise, call, SMS and a `critical` severity are for customer impact only. An
+alert that the chart's history shows firing at the same time every day (a batch job, a backup, a deploy) is a
+known event: raise its threshold or floor above it.
+
 ## Process
 
-Find or create the chart (`dashboard` / `add_chart_to_dashboard`) → verify it supports alerts and check its value range (`chart`, then `query` over a few days) → choose the alert type → `create_chart_alert`.
+Find or create the chart (`dashboard` / `add_chart_to_dashboard`); an error or latency chart is grouped by endpoint or error type, and on a low-traffic service it counts errors → verify it supports alerts and check its value range (`chart`, then `query` over a few days) → choose the alert type → `create_chart_alert` → tell the user how often each alert's conditions were met over the past week (`query`).
 
 ## Examples
 
-### High CPU Alert
+### Disk Almost Full Alert
 
 ```
 chart_id: 123
-name: "High CPU Usage"
+name: "Disk almost full"
 alert_type: "threshold"
 operator: "higher_than"
 value: 0.90  # On a `percent` chart (0-1 data shown as 90%); 90 only if the query returns 0-100
 confirmation_period: 60
 ```
 
-### Traffic Drop Alert
+### Orders Stopped Alert
 
 ```
 chart_id: 123
-name: "Traffic Drop"
-alert_type: "relative"
-operator: "decreases_by"
-value: 50
-query_period: 3600
-confirmation_period: 300
+name: "Orders stopped"
+alert_type: "threshold"
+operator: "lower_than"
+value: 5  # Orders per minute, under the quietest normal hour
+confirmation_period: 600
 ```
 
 ### Anomaly Detection with a Floor
@@ -174,7 +203,7 @@ anomaly_sensitivity: 5
 shown_interval: 10800
 anomaly_trigger: "higher"
 additional_conditions: [{ alert_type: "threshold", operator: "higher_than", value: 0.8 }]  # 80 only if the query returns 0-100
-metadata: { severity: "critical" }
+metadata: { severity: "warning" }
 ```
 
 For anomaly alerts the direction comes from `anomaly_trigger` (`any` = both directions), not from `operator`/`value` (threshold parameters).
