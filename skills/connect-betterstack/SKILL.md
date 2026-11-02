@@ -11,7 +11,7 @@ The Better Stack plugin brings skills, and its tools come from the Better Stack 
 
 Look at the tools you have right now.
 
-- **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `documentation`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
+- **Connected:** you have Better Stack tools, such as `incidents`, `monitors`, `on_calls`, `sources`, `query` or `documentation`. Their names may carry a prefix (`mcp__plugin_betterstack_betterstack__incidents`, `betterstack.incidents`, `betterstack_betterstack/incidents`). Confirm with one cheap read-only call: `incidents` with `status: ["ongoing"]`, or `monitors`. If it returns data (even an empty list), say Better Stack is connected and carry on with what the user asked.
 - **Not connected:** no Better Stack tools at all, only an `authenticate` tool for Better Stack, or a call that fails with `unauthorized`, 401, 403 or "needs authentication".
 
 Several Better Stack servers can show up at once, and each kind signs in differently:
@@ -74,10 +74,19 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 
 ### Antigravity
 
+In the Antigravity app or IDE:
+
 1. Open the settings with Cmd + , (Ctrl + , on Windows and Linux) and go to the **Customizations** tab.
 2. Click **Authenticate** next to the Better Stack server and sign in with your Better Stack account in the browser.
 3. Copy the authorization code the browser shows, paste it in the settings panel and click **Submit**.
 4. Start a new conversation.
+
+In the `agy` CLI:
+
+1. Run `/mcp`, select `betterstack_betterstack` and choose **Authenticate**.
+2. Sign in with your Better Stack account at the link it shows.
+3. Copy the authorization code the browser shows and paste it at the prompt.
+4. Start a new conversation with `/new`.
 
 If there is no Better Stack server at all, install the plugin: `agy plugin install https://github.com/BetterStackHQ/antigravity-plugin`.
 
