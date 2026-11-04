@@ -227,5 +227,6 @@ For anomaly alerts the direction comes from `anomaly_trigger` (`any` = both dire
 | Get alert details  | `chart_alert`              |
 | Create             | `create_chart_alert`       |
 | Edit configuration | `edit_chart_alert`         |
-| Pause/unpause      | `toggle_chart_alert_pause` |
+| Pause              | `pause_chart_alert`        |
+| Unpause            | `unpause_chart_alert`      |
 | Delete             | `delete_chart_alert`       |
