@@ -75,6 +75,7 @@ The plugin comes with skills that teach your agent how to work with Better Stack
 **Investigate**
 
 - **investigate-incident**: investigates an incident or alert end to end. It finds the incident, checks who is on call, pulls the errors, logs, traces, metrics and releases around the start time, and posts a short situation report. It stays read-only unless asked to act.
+- **slack-reports**: answers Better Stack questions in Slack (for example in Claude Tag) as a short report: the answer and key number first, then one table that Slack shows natively, and links back to Better Stack.
 - **health-check**: a quick health assessment of a server or service (CPU, memory, disk, network, log levels, dependencies) with charts.
 
 **Query**
@@ -136,7 +137,7 @@ Restrict which tools the agent can use with one of these headers:
 ## Maintainers
 
 - **One version for all four plugins.** The Claude ([claude-plugin](https://github.com/BetterStackHQ/claude-plugin)), Codex ([codex-plugin](https://github.com/BetterStackHQ/codex-plugin)), Cursor ([cursor-plugin](https://github.com/BetterStackHQ/cursor-plugin)) and Antigravity ([antigravity-plugin](https://github.com/BetterStackHQ/antigravity-plugin)) plugins always release with the same version number. A change that bumps one plugin's version bumps all four to that same number, in PRs opened together, even when the others have nothing else to change. The version is set in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (Claude), `.codex-plugin/plugin.json` (Codex), `.cursor-plugin/plugin.json` (Cursor) and `plugin.json` (Antigravity).
-- **Skills from AI SRE.** All skills except `investigate-incident` and `connect-betterstack` are built from AI SRE's skills in aisre-proxy with the sync tool in the maintainers' repository, `BetterStackHQ/mcp-plugins` (`sync-skills/`). Change them in aisre-proxy, then sync.
+- **Skills from AI SRE.** All skills except `investigate-incident`, `connect-betterstack` and `slack-reports` are built from AI SRE's skills in aisre-proxy with the sync tool in the maintainers' repository, `BetterStackHQ/mcp-plugins` (`sync-skills/`). Change them in aisre-proxy, then sync.
 - **Only plugin files in this repository.** The repository is the plugin: everything in it ships to people who install it, and Anthropic's plugin directory scans all of it. Scripts and agent notes here hold new versions for review, so they live in `BetterStackHQ/mcp-plugins`.
 
 ## License
