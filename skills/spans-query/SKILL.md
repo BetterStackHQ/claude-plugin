@@ -7,7 +7,7 @@ description: MUST load BEFORE writing any Better Stack spans/traces SQL query. C
 
 ## Where the query runs
 
-These queries read raw events, so they run ad hoc through `query` and `render_chart`; dashboard charts only read the metrics collection (see `dashboard-builder` for log and span volumes there). `query` and `render_chart` take no template variables. First call `query_help` with the source ID: it names the source's collections and the table to pass. Put the collection where `{{source}}` stands (e.g. `remote(t123_my_app_logs)` for the last ~30 minutes, `s3Cluster(primary, t123_my_app_s3)` with its row-type filter for older rows), a bucket such as `toStartOfInterval(dt, INTERVAL 5 MINUTE)` where `{{time}}` stands, and concrete bounds such as `dt > now() - INTERVAL 3 HOUR` for `{{start_time}}` and `{{end_time}}`. Add a `LIMIT`, and call `query_windows` before an `s3Cluster(...)` query over more than a few hours.
+These queries read raw events, so they run ad hoc through `query` and `render_chart`; dashboard charts only read the metrics collection (see `dashboard-builder` for log and span volumes there). Write them as this skill shows, with `{{source}}`, `{{time}}`, `{{start_time}}` and `{{end_time}}`, and pass `source_id`, `source_type` (`logs`, `spans` or `web_events`), `start_time` and `end_time` (`now-3h`, `now-1d`, or an ISO 8601 datetime) and no `table`; the tool builds the source's collections for `{{source}}` and resolves `{{time}}` to a bucket that suits the range. One change from the examples: filter time with `dt >= {{start_time}} AND dt < {{end_time}}`, not `{{time}} BETWEEN {{start_time}} AND {{end_time}}`, the dashboards' form, which drops the rows of the range's first partial bucket and which `query` cannot split. First call `query_help` with the source ID for the syntax, and add a `LIMIT`. A template that lists the newest rows (`ORDER BY dt DESC LIMIT n`, no aggregate, `GROUP BY`, `DISTINCT` or subquery), or one that only aggregates (`count()`, `countIf()`, `sum()`, `sumIf()`, `min()` or `max()` beside its `GROUP BY` columns, no `HAVING`, `DISTINCT` or subquery) over at most 300,000,000 rows, then needs one `query` call however wide its range: `query` reads the range in time windows itself, merges the rows and says how far it read. Before any other query over more than a few hours, and before `render_chart` over such a range, call `query_windows` with the same arguments: it says whether the range fits one call and, if not, the windows to pass as `start_time` and `end_time`.
 
 ## Quick Reference
 
@@ -238,7 +238,7 @@ LIMIT 20
 | `JSONExtract(raw, 'service.name', ...)` | `JSONExtract(raw, 'resource', 'attributes', 'service.name', ...)` |
 | `{{_service}}` or a guessed field       | Use the service name expression from `source`                     |
 | `duration` column                       | Calculate: `end_time_unix_nano - start_time_unix_nano`            |
-| `WHERE dt BETWEEN`                      | `WHERE {{time}} BETWEEN ...`                                      |
+| `WHERE dt BETWEEN`                      | `WHERE dt >= {{start_time}} AND dt < {{end_time}}`                |
 | `'String'` type                         | `'Nullable(String)'` - prevents failures on missing fields        |
 | ID equality without a prefilter         | Add `raw LIKE '%<id>%'` before the extraction (see rule 8)        |
 | `avgMerge(...)` on spans                | `AVG(...)` - spans are not pre-aggregated                         |
