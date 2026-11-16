@@ -21,7 +21,7 @@ Only a log field that is not extracted needs a detour: suggest [Explore](https:/
 3. **Plan or validate the layout** — load the `dashboard-layout` skill (it has the row templates and the six layout rules). Then:
    - **Building from scratch**: follow `dashboard-layout`'s planning process to draft the section/row structure.
    - **Building from a pre-existing plan** (e.g. a plan file the user gives you): treat the plan's layout as **untrusted input**. Walk every section's row spec against `dashboard-layout` Rules 3-6 BEFORE you add any chart. The most common plan-side violation: a `w:12` chart paired with a `w:6 + w:6` row above it (orphan-row + full-width, breaks Rules 3 and 4 at once). When you find a violation, propose the fix (e.g. three charts at `w:4+w:4+w:4`) and patch the plan (or flag it to the user) — never silently implement a layout that breaks the rules.
-4. **Validate queries** - Run each query with `query` to verify data exists and values make sense (substitute the template variables as `metrics-query` describes)
+4. **Validate queries** - Execute each query with `query` to verify data exists and values make sense
 5. **Build incrementally** - Add charts one by one in row order, verify each works
 6. **Verify structure** - After finishing the generation - check if its structured logically, and if there aren't any useless or unrelated charts. Verify even after using prebuilt templates to make sure that source works with that, and it covers all requested features
 

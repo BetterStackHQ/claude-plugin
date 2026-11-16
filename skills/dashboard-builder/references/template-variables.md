@@ -24,7 +24,7 @@ A bare `{{var}}` only becomes a real (text) variable once a human opens the dash
 
 Prefer the SQL selects inside `[[ ... ]]` clauses or as menu selectors, not as bare required refs — their value resolves at runtime and may be empty. Use `dashboard` to see existing variables and any referenced-but-undefined ones, then remove with `remove_dashboard_variable`.
 
-`select_with_sql` / `multi_select_with_sql` take an **expression**, not a full query — the platform wraps it as `SELECT DISTINCT <expr> AS option FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} LIMIT 50` to populate the dropdown. **Validate it the way the dashboard will:** run that exact wrapped query via `query` (with the source's collection and concrete bounds in place of the template variables) and confirm it returns real values before calling `set_dashboard_variable` — if it errors or returns nothing, the dropdown will be empty.
+`select_with_sql` / `multi_select_with_sql` take an **expression**, not a full query — the platform wraps it as `SELECT DISTINCT <expr> AS option FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} LIMIT 50` to populate the dropdown. **Validate it the way the dashboard will:** run that exact wrapped query via `query` and confirm it returns real values before calling `set_dashboard_variable` — if it errors or returns nothing, the dropdown will be empty.
 
 `select_predefined_sql` filter SQL is a full query — filter time with `dt BETWEEN {{start_time}} AND {{end_time}}`, never `{{time}}` (that only buckets inside a chart and breaks here). E.g. `SELECT label('cmd') FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND name = 'redis_commands_total' GROUP BY label('cmd') ORDER BY avgMerge(rate_avg) DESC LIMIT 5`.
 
@@ -49,7 +49,7 @@ To query another source on the same dashboard, define a `source`-type variable a
 
 ## Example — add a host filter to a CPU chart
 
-1. Validate the options query with `query`: `SELECT DISTINCT label('_host') AS option FROM <metrics collection> WHERE dt > now() - INTERVAL 3 HOUR LIMIT 50` → returns host names.
+1. Validate the options query: `query("SELECT DISTINCT label('_host') AS option FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} LIMIT 50")` → returns host names.
 2. `set_dashboard_variable(dashboard_id, name: "host", variable_type: "multi_select_with_sql", sql_definition: "label('_host')")`
 3. In the chart query: `... WHERE dt BETWEEN {{start_time}} AND {{end_time}} [[ AND match(label('_host'), {{host}}) ]]`
 
