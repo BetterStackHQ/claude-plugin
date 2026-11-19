@@ -74,7 +74,15 @@ The CLI and the ChatGPT desktop app share the same setup. If you have a shell, y
 
 ### Antigravity
 
-In the Antigravity app or IDE:
+In the Antigravity desktop app:
+
+1. Click **Customizations** in the left sidebar, switch to **Installed** and open **Better Stack**.
+2. Click **Go to Accounts** (or open the **Accounts** tab) and click **Sign In** next to `betterstack`.
+3. Sign in with your Better Stack account in the browser and click **Allow access**.
+4. Copy the code the browser shows, paste it in the **Paste code** field and click **Submit**.
+5. Start a new conversation.
+
+In the Antigravity IDE:
 
 1. Open the settings with Cmd + , (Ctrl + , on Windows and Linux) and go to the **Customizations** tab.
 2. Click **Authenticate** next to the Better Stack server and sign in with your Better Stack account in the browser.
